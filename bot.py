@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Lee el token de forma segura desde el sistema
-TOKEN = os.getenv("DISCORD_TOKEN")
+TOKEN = os.getenv("TOKEN")
 
 intents = discord.Intents.default()
 intents.message_content = True
