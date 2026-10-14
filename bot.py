@@ -62,17 +62,17 @@ async def on_ready():
 
 @bot.command(name="unir")
 async def unirse(ctx):
-    """Comando para que el bot entre al canal de voz"""
     if ctx.author.voice:
         channel = ctx.author.voice.channel
-        if ctx.voice_client is not None:
+        if ctx.voice_client:
             await ctx.voice_client.move_to(channel)
         else:
-            await channel.connect()
+            # Forzamos la conexión limpia con soporte de reintentos
+            await channel.connect(reconnect=True, timeout=60.0)
         await ctx.send(f"🎧 ¡Aku Aku se ha unido a **{channel.name}**!")
     else:
-        await ctx.send("❌ ¡Tienes que estar conectado a un canal de voz primero, bandicoot!")
-
+        await ctx.send("❌ ¡Conéctate a un canal de voz primero!")
+          
 @bot.command(name="play")
 async def reproducir(ctx, *, query):
     """Comando para reproducir música con !play"""
@@ -110,7 +110,7 @@ async def reproducir(ctx, *, query):
             
         except Exception as e:
             await ctx.send(f"❌ Ocurrió un error al intentar reproducir la música: {e}")
-            
+
 @bot.command(name="salir")
 async def salir(ctx):
     """Comando para sacar al bot del canal de voz"""
