@@ -33,4 +33,4 @@ async def salir(ctx):
         await ctx.send("❌ ¡No estoy en ningún canal de voz!")
 
 # PEGA TU TOKEN SECRETO ENTRE LAS COMILLAS ABAJO
-bot.run("TU_TOKEN_DE_DISCORD_AQUI")
+bot.run("MTU1OTk3NTY5MjU5NzIwNzA3Mw.Grg1HL.ix7hgl2qALCrIqb3AlsIEJv-8VzVVSOQ1crvKY")
