@@ -75,24 +75,42 @@ async def unirse(ctx):
 
 @bot.command(name="play")
 async def reproducir(ctx, *, query):
-    """Comando para reproducir música escribiendo !play [nombre o link de YouTube]"""
-    if not ctx.voice_client:
-        if ctx.author.voice:
-            channel = ctx.author.voice.channel
+    """Comando para reproducir música con !play"""
+    
+    # 1. Verificar si el usuario está en un canal de voz
+    if not ctx.author.voice:
+        await ctx.send("❌ ¡Tienes que estar conectado a un canal de voz primero, bandicoot!")
+        return
+
+    channel = ctx.author.voice.channel
+
+    # 2. Si el bot no está conectado, se une automáticamente al canal del usuario
+    if ctx.voice_client is None:
+        try:
             await channel.connect()
-        else:
-            await ctx.send("❌ ¡Tienes que estar en un canal de voz para que pueda poner música!")
+        except Exception as e:
+            await ctx.send(f"❌ No pude conectarme al canal de voz: {e}")
             return
+    elif ctx.voice_client.channel != channel:
+        # Si está en otro canal, se mueve al tuyo
+        await ctx.voice_client.move_to(channel)
 
     async with ctx.typing():
         try:
-            # Buscar y preparar la pista de audio
+            # 3. Buscar y reproducir la pista
             player = await YTDLSource.from_url(query, loop=bot.loop, stream=True)
+            
+            # Verificamos una vez más que el cliente de voz esté activo
+            if ctx.voice_client is None:
+                await ctx.send("❌ Error: El bot perdió la conexión de voz.")
+                return
+
             ctx.voice_client.play(player, after=lambda e: print(f'Error en el reproductor: {e}') if e else None)
-            await ctx.send(f"🎶 Reproduciendo ahora mismo: **{player.title}**")
+            await ctx.send(f"🎶 Aku Aku está sonando: **{player.title}**")
+            
         except Exception as e:
             await ctx.send(f"❌ Ocurrió un error al intentar reproducir la música: {e}")
-
+            
 @bot.command(name="salir")
 async def salir(ctx):
     """Comando para sacar al bot del canal de voz"""
