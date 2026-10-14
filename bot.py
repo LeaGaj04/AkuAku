@@ -17,7 +17,9 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 # Configuración de yt-dlp para extraer el link de audio de YouTube
 ytdl_format_options = {
     'format': 'bestaudio/best',
-    'nostream': True,
+    'extractaudio': True,
+    'audioformat': 'mp3',
+    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
     'restrictfilenames': True,
     'noplaylist': True,
     'nocheckcertificate': True,
@@ -27,6 +29,8 @@ ytdl_format_options = {
     'no_warnings': True,
     'default_search': 'auto',
     'source_address': '0.0.0.0',
+    # Esto evita el error de "Sign in to confirm you're not a bot"
+    'extractor_args': {'youtube': {'player_client': ['android', 'web']}},
 }
 
 ffmpeg_options = {
