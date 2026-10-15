@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 import yt_dlp
+from keep_alive import keep_alive
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
@@ -119,6 +120,9 @@ async def salir(ctx):
         await ctx.send("👋 ¡Aku Aku se retira del canal de audio!")
     else:
         await ctx.send("❌ ¡No estoy en ningún canal de voz!")
+
+# Arrancar el servidor HTTP en segundo plano para Koyeb
+keep_alive()
 
 # Arrancar el bot con el token configurado
 bot.run(TOKEN)
